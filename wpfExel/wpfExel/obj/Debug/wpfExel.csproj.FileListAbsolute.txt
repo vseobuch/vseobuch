@@ -18,3 +18,5 @@ E:\Shag\Projects\Vseobuch\wpfExel\wpfExel\bin\Debug\EntityFramework.dll
 E:\Shag\Projects\Vseobuch\wpfExel\wpfExel\bin\Debug\EntityFramework.xml
 E:\Shag\Projects\Vseobuch\wpfExel\wpfExel\bin\Debug\EntityFramework.SqlServer.dll
 E:\Shag\Projects\Vseobuch\wpfExel\wpfExel\bin\Debug\EntityFramework.SqlServer.xml
+E:\Shag\Projects\Vseobuch\wpfExel\wpfExel\bin\Debug\VseobuchDB.pdb
+E:\Shag\Projects\Vseobuch\wpfExel\wpfExel\bin\Debug\VseobuchDB.dll.config

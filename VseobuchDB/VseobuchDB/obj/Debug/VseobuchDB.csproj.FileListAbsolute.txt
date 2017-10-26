@@ -19,3 +19,14 @@ D:\VseobuchDB2\VseobuchDB\obj\Debug\VseobuchDB.csproj.CoreCompileInputs.cache
 D:\VseobuchDB2\VseobuchDB\obj\Debug\VseobuchDB.dll
 D:\VseobuchDB2\VseobuchDB\obj\Debug\VseobuchDB.pdb
 D:\VseobuchDB2\VseobuchDB\obj\Debug\VseobuchDB.csprojResolveAssemblyReference.cache
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\bin\Debug\VseobuchDB.dll.config
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\bin\Debug\VseobuchDB.dll
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\bin\Debug\VseobuchDB.pdb
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\bin\Debug\EntityFramework.dll
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\bin\Debug\EntityFramework.SqlServer.dll
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\bin\Debug\EntityFramework.xml
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\bin\Debug\EntityFramework.SqlServer.xml
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\obj\Debug\VseobuchDB.csprojResolveAssemblyReference.cache
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\obj\Debug\VseobuchDB.csproj.CoreCompileInputs.cache
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\obj\Debug\VseobuchDB.dll
+E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\obj\Debug\VseobuchDB.pdb

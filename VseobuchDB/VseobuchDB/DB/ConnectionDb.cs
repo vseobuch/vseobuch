@@ -90,7 +90,7 @@ namespace VseobuchDB.DB
                 address2 = db.Addresses.Add(address_);
             }
             db.SaveChanges();                                 
-            db.Students_In_Building.Add(new Student_In_Building() { student = student_, address=address2, FlatNumber=FlatNumber_ });
+            db.Students_In_Building.Add(new Student_In_Building() { graduation=DateTime.Parse("1/1/1977"), student = student_, address=address2, FlatNumber=FlatNumber_ });
             db.SaveChanges();//
             return 1;
         }

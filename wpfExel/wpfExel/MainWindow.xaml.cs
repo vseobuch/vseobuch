@@ -43,7 +43,9 @@ namespace wpfExel
             switch (i)
             {
                 case 1:
-                    //readStudent_in_School();       
+                    Microsoft.Win32.OpenFileDialog ofp = new Microsoft.Win32.OpenFileDialog();
+                    if ((bool)ofp.ShowDialog())
+                        readStudent_in_School(ofp.FileName);       
                     //MyDbContext db = new MyDbContext("Students1");
                     //City city = db.Citys.FirstOrDefault();
                     //var dist = db.Districts.ToList();
@@ -75,9 +77,9 @@ namespace wpfExel
                     // city.districts = dist;
                     //city.districts.Add(new District() { Name = "Галицький" });
                     //db.SaveChanges();
-                   
+
                     //db.Students_In_School.ToList();
-                   
+
                     /*excelApp.SheetsInNewWorkbook = 3;
                     excelApp.Workbooks.Add(Type.Missing);
                     excelApp.SheetsInNewWorkbook = 5;
@@ -104,6 +106,10 @@ namespace wpfExel
 
                     break;
                 case 2:
+
+                    Microsoft.Win32.OpenFileDialog ofp1 = new Microsoft.Win32.OpenFileDialog();
+                    if((bool)ofp1.ShowDialog())                    
+                        readStudent_in_Building(ofp1.FileName);
                     excelApp.Quit();
                     break;
                 default:
@@ -111,14 +117,15 @@ namespace wpfExel
                     break;
             }
         }
-
-        private void readStudent_in_School()
+        /// <summary>
+        /// Метод для запису студентів, школи і студентів в школі
+        /// </summary>
+        private void readStudent_in_School(string path)
         {
+            List<string> letter = new List<string>();
+            letter = letters();            
             excelApp = new Excel.Application();
-            //excelApp.Visible = true;
-            Microsoft.Win32.OpenFileDialog ofp = new Microsoft.Win32.OpenFileDialog();
-            ofp.ShowDialog();
-            string path = ofp.FileName;
+            //excelApp.Visible = true;            
             excelappworkbook = excelApp.Workbooks.Open(
                 path, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing,
@@ -126,38 +133,189 @@ namespace wpfExel
                 Type.Missing, Type.Missing);
             excelSheets = excelappworkbook.Worksheets;
             excelWorksheet = (Excel.Worksheet)excelSheets.get_Item(1);
-            School school = new School();
-            List<KeyValuePair<Student, string>> students = new List<KeyValuePair<Student, string>>();            
-            for(int i=0;i<3;i++)
+            School school = new School();            
+            List<KeyValuePair<Student, string>> students = new List<KeyValuePair<Student, string>>();
+            List<int> startRead = ofsetRowColumnExcel(1);
+            int startRow = startRead[1]+1;
+            int startColumn = startRead[0];
+            school.Name = Convert.ToString((excelWorksheet.get_Range(letter[startColumn] + startRow, Type.Missing)).Value2);
+            for (int i=0;i>-1;i++)
             {
-                int row = i + 3;
-                Student student = new Student();                
-                student.LastName = Convert.ToString((excelWorksheet.get_Range("C" + row.ToString(), Type.Missing)).Value2);
-                student.FirstName = Convert.ToString((excelWorksheet.get_Range("D" + row.ToString(), Type.Missing)).Value2);
-                student.Surname = Convert.ToString((excelWorksheet.get_Range("E" + row.ToString(), Type.Missing)).Value2);
-                DateTime date = DateTime.Parse(Convert.ToString((excelWorksheet.get_Range("F" + row.ToString(), Type.Missing)).Value2) + "." +
-                    Convert.ToString((excelWorksheet.get_Range("G" + row.ToString(), Type.Missing)).Value2) + "." +
-                    Convert.ToString((excelWorksheet.get_Range("H" + row.ToString(), Type.Missing)).Value2));
-                student.Birthday = date;
-                string sex = ((string)(Convert.ToString((excelWorksheet.get_Range("I" + row.ToString(), Type.Missing)).Value2))).ToLower();
-
-                if (sex.Contains("ж"))
-                    student.Sex = true;
+                int j = startColumn+1;
+                string row = (i+startRow).ToString();
+                Student student = new Student();
+                string schoolClass = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                student.LastName = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                student.FirstName = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                student.Surname = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                string day = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                string month = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                string year = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                if(day!=null&&month!=null&&year!=null)
+                {
+                    DateTime date = DateTime.Parse(day + "." + month + "." + year);
+                    student.Birthday = date;
+                }
                 else
-                    student.Sex = false;                
-                string schoolClass = Convert.ToString((excelWorksheet.get_Range("B" + row.ToString(), Type.Missing)).Value2);                
-                students.Add(new KeyValuePair<Student, string>(student, schoolClass));
-            }
-            school.Name = Convert.ToString((excelWorksheet.get_Range("A" + 3, Type.Missing)).Value2);
-            excelApp.Quit();            
-            ConnectionDb db = new ConnectionDb("Students1");
-            //ConnectionDb.AddRangeStuddent(students);
-            ConnectionDb.ImportFromExelSchool(students, school.Name);
-            //char a = 'A';
-            //int b = Convert.ToInt32(a);
-            //b++;
-            //a = Convert.ToChar((int)b);
+                {
+                    //не вказана дата народження треба обробити при вставці в БД
+                } 
+                if(excelWorksheet.get_Range(letter[j] + row, Type.Missing).Value2!=null)
+                {
+                    string sex = ((string)(Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2))).ToLower();
 
+                    if (sex.Contains("ж"))
+                        student.Sex = true;
+                    else
+                        student.Sex = false;
+                }
+                
+                if (student.LastName != null || student.Surname != null || student.FirstName != null)
+                {
+                    students.Add(new KeyValuePair<Student, string>(student, schoolClass));                    
+                }                    
+                else
+                {
+                    startRead = ofsetRowColumnExcel(Convert.ToInt32(row));
+                    if (startRead[0] != -1)
+                    {
+                        startRow = startRead[1] + 1;
+                        j = startRead[0];
+                        i = -1;
+                    }
+                    else
+                        i = -2;//Вихід з циклу
+                }
+            }            
+            excelApp.Quit();
+            ConnectionDb db = new ConnectionDb("Students1");            
+            ConnectionDb.ImportFromExelSchool(students, school.Name);
+        }
+
+        private void readStudent_in_Building(string path)
+        {
+            ConnectionDb db = new ConnectionDb("Students1");
+            List<string> letter = new List<string>();
+            letter = letters();            
+            excelApp = new Excel.Application();
+            //excelApp.Visible = true;           
+            excelappworkbook = excelApp.Workbooks.Open(
+                path, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing);
+            excelSheets = excelappworkbook.Worksheets;
+            excelWorksheet = (Excel.Worksheet)excelSheets.get_Item(1);
+            List<int> startRead = ofsetRowColumnExcel(1);            
+            int startRow = startRead[1]+2;
+            int startColumn = startRead[0]+1;            
+            for (int i = 0;i>-1 ; i++)
+            {
+                int j = startColumn;
+                string row = (i + startRow).ToString();
+                Student student = new Student();                
+                student.LastName = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                student.FirstName = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                student.Surname = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                string day = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                string month = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                string year = Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                if (day != null && month != null && year != null)
+                {
+                    DateTime date = DateTime.Parse(day + "." + month + "." + year);
+                    student.Birthday = date;
+                }
+                else
+                {
+                    //не вказана дата народження треба обробити при вставці в БД
+                }
+                if (excelWorksheet.get_Range(letter[j] + row, Type.Missing).Value2 != null)
+                {
+                    string sex = ((string)(Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2))).ToLower();
+
+                    if (sex.Contains("ж"))
+                        student.Sex = true;
+                    else
+                        student.Sex = false;
+                }               
+                string district= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                string nameStreet= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                string numberBilding= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                string letterBilding= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                if (letterBilding != null)
+                    numberBilding += letterBilding;
+                string numberFlat= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                string letterFlat= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                if (letterFlat != null)
+                    numberFlat += letterFlat;
+                j++;//поле категорія
+                string nameLKP= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                Address address = new Address()
+                {
+                    NumberBuilding = numberBilding,
+                    Street = nameStreet,
+                    NameLKP = nameLKP,
+                    district = new District()
+                    {
+                        Name = district
+                    }                    
+                };
+                if (student.LastName != null || student.Surname != null || student.FirstName != null)
+                     ConnectionDb.ImportFromExelBuilding(student, address, numberFlat);                   
+                else
+                {
+                    startRead = ofsetRowColumnExcel(Convert.ToInt32(row));
+                    if (startRead[0] != -1)
+                    {
+                        startRow = startRead[1] + 1;
+                        j = startRead[0];
+                        i = -1;
+                    }
+                    else
+                        i = -2;
+                }
+            }
+            excelApp.Quit();           
+        }
+
+        public List<int> ofsetRowColumnExcel(int row_Start)//Визначення зміщення для початку читання файлу
+        {
+            int numberRow;
+            List<string> letter = new List<string>();
+            letter = letters();
+            List<int> ofset_row_column = new List<int>();
+            for(int i=0;i<10;i++)
+            {
+                for(int j=1;j<21;j++)
+                {
+                    numberRow = j + row_Start;
+                    string start = Convert.ToString((excelWorksheet.get_Range(letter[i] + numberRow.ToString(), Type.Missing)).Value2);
+                    if (start != null)
+                    {
+                        start = start.ToLower();
+                        if (start.Contains("заклад"))
+                        {
+                            ofset_row_column.Add(i);
+                            ofset_row_column.Add(j + row_Start);
+                            return ofset_row_column;
+                        }
+                    }
+                }
+            }
+            ofset_row_column.Add(-1);
+            return ofset_row_column;
+        }
+
+        public List<string> letters()
+        {
+            List<string> letter = new List<string>();
+            char a = 'A';
+            for (int i = 0; i < 26; i++)
+            {
+                letter.Add(a.ToString());
+                a++;
+            }
+            return letter;
         }
     }
 }

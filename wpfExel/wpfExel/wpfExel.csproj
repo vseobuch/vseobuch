@@ -59,7 +59,7 @@
     </Reference>
     <Reference Include="VseobuchDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\VseobuchDB.dll</HintPath>
+      <HintPath>..\..\VseobuchDB\VseobuchDB\bin\Debug\VseobuchDB.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
