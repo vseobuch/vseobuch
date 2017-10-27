@@ -74,7 +74,7 @@ namespace VseobuchDB.DB
             {
                 Student st = new Student();
                 st = lStu[i];
-                db.Students_In_School.Add(new Student_In_School() { graduation=DateTime.Parse("1/1/2000"),  student = st, SchoolClass= Pair_student_class[i].Value, school = sch });
+                db.Students_In_School.Add(new Student_In_School() { graduation=DateTime.Parse("1/1/1970"),  student = st, SchoolClass= Pair_student_class[i].Value, school = sch });
                 i++;                
             }
             db.SaveChanges();
@@ -90,11 +90,43 @@ namespace VseobuchDB.DB
                 address2 = db.Addresses.Add(address_);
             }
             db.SaveChanges();                                 
-            db.Students_In_Building.Add(new Student_In_Building() { graduation=DateTime.Parse("1/1/1977"), student = student_, address=address2, FlatNumber=FlatNumber_ });
+            db.Students_In_Building.Add(new Student_In_Building() { student = student_, address=address2, FlatNumber=FlatNumber_, graduation= DateTime.Parse("1/1/1970") });
             db.SaveChanges();//
             return 1;
         }
 
+
+        public int CountStudents()
+        {
+            return db.Students.Count();
+        }
+
+        public int CountStudentsInBuilding()
+        {
+            return db.Students_In_Building.Count();
+        }
+
+        public int CountStudentsInSchool()
+        {
+            return db.Students_In_School.Count();
+        }
+
+        private bool FoundStudent(Student a)
+        {
+            Student_In_School aa = db.Students_In_School.FirstOrDefault(x=>x.ID==a.ID);
+            var bb=db.Students_In_Building.FirstOrDefault(x => x.ID == a.ID);
+            if (aa != null && bb != null)
+                return true;
+            return false;
+        }
+        public List<Student> FoundStudent() //повертає список студентів про яких є дані зі школи і жеку
+        {
+            return db.Students.Where(x => FoundStudent(x)).ToList();
+        }
+        public List<Student> NotFoundStudent() //повертає список студентів про яких є дані зі школи і жеку
+        {
+            return db.Students.Where(x => !FoundStudent(x)).ToList();
+        }
 
     }
 }
