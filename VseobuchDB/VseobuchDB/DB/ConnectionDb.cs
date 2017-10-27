@@ -74,8 +74,11 @@ namespace VseobuchDB.DB
             {
                 Student st = new Student();
                 st = lStu[i];
-                db.Students_In_School.Add(new Student_In_School() { graduation=DateTime.Parse("1/1/1970"),  student = st, SchoolClass= Pair_student_class[i].Value, school = sch });
-                i++;                
+                if(db.Students_In_School.FirstOrDefault(x=>x.student.ID==st.ID)==null)
+                {
+                    db.Students_In_School.Add(new Student_In_School() { graduation = DateTime.Parse("1/1/1970"), student = st, SchoolClass = Pair_student_class[i].Value, school = sch });
+                    i++;
+                }                              
             }
             db.SaveChanges();
             return i;
@@ -87,12 +90,25 @@ namespace VseobuchDB.DB
             Address address2= db.Addresses.FirstOrDefault(x => x.Street == address_.Street && x.NumberBuilding == address_.NumberBuilding);
             if (address2 == null)
             {
+                District distr = db.Districts.FirstOrDefault(x => x.Name == address_.district.Name);
+                if (distr == null)
+                {
+                    City city = db.Citys.FirstOrDefault(x => x.Name == "Львів");
+                    db.Districts.FirstOrDefault();
+                    city.districts.Add(address_.district);                                   
+                }                    
+                else                
+                    address_.district = distr;               
                 address2 = db.Addresses.Add(address_);
             }
-            db.SaveChanges();                                 
-            db.Students_In_Building.Add(new Student_In_Building() { student = student_, address=address2, FlatNumber=FlatNumber_, graduation= DateTime.Parse("1/1/1970") });
-            db.SaveChanges();//
-            return 1;
+            db.SaveChanges();
+            if(db.Students_In_Building.FirstOrDefault(x=>x.student.ID==student_.ID)==null)
+            {
+                db.Students_In_Building.Add(new Student_In_Building() { student = student_, address = address2, FlatNumber = FlatNumber_, graduation = DateTime.Parse("1/1/1970") });
+                db.SaveChanges();//
+                return 1;
+            }
+            return 0;
         }
 
 
@@ -128,5 +144,19 @@ namespace VseobuchDB.DB
             return db.Students.Where(x => !FoundStudent(x)).ToList();
         }
 
+        public List<City> GetCity()
+        {
+            return db.Citys.ToList();
+        }
+
+        public List<District> GetDistrict()
+        {
+            return db.Districts.ToList();
+        }
+
+        public List<School> GetSchool()
+        {
+            return db.Schools.ToList();
+        }
     }
 }

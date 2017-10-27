@@ -207,8 +207,8 @@ namespace wpfExel
             excelSheets = excelappworkbook.Worksheets;
             excelWorksheet = (Excel.Worksheet)excelSheets.get_Item(1);
             List<int> startRead = ofsetRowColumnExcel(1);            
-            int startRow = startRead[1]+2;
-            int startColumn = startRead[0]+1;            
+            int startRow = startRead[1]+1;
+            int startColumn = startRead[0]+2;            
             for (int i = 0;i>-1 ; i++)
             {
                 int j = startColumn;
