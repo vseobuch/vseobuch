@@ -76,9 +76,9 @@ namespace VseobuchDB.DB
                 st = lStu[i];
                 if(db.Students_In_School.FirstOrDefault(x=>x.student.ID==st.ID)==null)
                 {
-                    db.Students_In_School.Add(new Student_In_School() { graduation = DateTime.Parse("1/1/1970"), student = st, SchoolClass = Pair_student_class[i].Value, school = sch });
-                    i++;
-                }                              
+                    db.Students_In_School.Add(new Student_In_School() { graduation = DateTime.Parse("1/1/1970"), student = st, SchoolClass = Pair_student_class[i].Value, school = sch });                    
+                }
+                i++;
             }
             db.SaveChanges();
             return i;
