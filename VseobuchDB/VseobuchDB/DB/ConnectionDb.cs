@@ -158,5 +158,22 @@ namespace VseobuchDB.DB
         {
             return db.Schools.ToList();
         }
+
+        public List<School> GetSchoolInDistrict(int ID)
+        {
+            return db.Schools.Where(x => x.address.district.ID == ID).ToList();
+        }
+
+        public List<Student> GetSudentsinSchool(int ID)
+        {
+            db.Students.ToList();
+            List<Student_In_School> sin = db.Students_In_School.Where(x => x.school.ID == ID).ToList();
+            List<Student> students = new List<Student>();
+            foreach (Student_In_School s in sin)
+            {               
+                students.Add(s.student);
+            }                
+            return students;
+        }
     }
 }

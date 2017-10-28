@@ -10,7 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+            
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.3*"></ColumnDefinition>
@@ -26,5 +26,11 @@
                 </Menu>
             </ToolBar>
         </StackPanel>
+        <TreeView Name="treeview" Grid.Row="1" Grid.Column="0">
+            <TreeViewItem Name="itemStart" Header="Місто" Expanded="itemStart_Expanded"></TreeViewItem>
+        </TreeView>
+        <DataGrid Name="dataGrid" Grid.Row="1" Grid.Column="1">
+            
+        </DataGrid>
     </Grid>
 </Window>

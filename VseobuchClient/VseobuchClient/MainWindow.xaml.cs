@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VseobuchDB;
 using VseobuchDB.DB;
 
 namespace VseobuchClient
@@ -23,25 +24,83 @@ namespace VseobuchClient
     {
         public MainWindow()
         {
-            InitializeComponent();            
-            
+            InitializeComponent();
+            ConnectionDb db = new ConnectionDb("Students1");
+            City city = new City();
+            city = db.GetCity()[0];
+            itemStart.Tag = city;
+            itemStart.Items.Add("*");
+            ShowTreeView(itemStart);
+
+        }
+        
+        private void UploadFile(object sender, RoutedEventArgs e)
+        {
+                Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+                if ((bool)openFileDialog.ShowDialog())
+                {
+                    ConnectionDb db = new ConnectionDb("Students1");
+                    string path = openFileDialog.FileName;
+                    if (((string)((MenuItem)e.Source).Tag).Contains("school"))
+                    {
+                        readwriteExel.readStudent_in_School(path);
+                    }
+                    else if (((string)((MenuItem)e.Source).Tag).Contains("building"))
+                    {
+                        readwriteExel.readStudent_in_Building(path);
+                    }                    
+                }
         }
 
-        private void UploadFile(object sender, RoutedEventArgs e)
-        {           
-            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            if((bool)openFileDialog.ShowDialog())
+        private void itemStart_Expanded(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem treeItem = new TreeViewItem();
+            treeItem = (TreeViewItem)e.Source;                             
+            ShowTreeView(treeItem);            
+        }
+
+        private void ShowTreeView(TreeViewItem treeItem)
+        {
+            ConnectionDb db = new ConnectionDb("Students1");
+            TreeViewItem item;
+            treeItem.Items.Clear();
+            if(treeItem.Tag is City)
+            {                
+                item = new TreeViewItem();
+                item.Header = ((City)treeItem.Tag).Name;                
+                item.Tag = db.GetDistrict();
+                item.Items.Add("*");
+                treeItem.Items.Add(item);
+                return;
+            }
+            if(treeItem.Tag is List<District>)
             {
-                ConnectionDb db = new ConnectionDb("Students1");
-                string path = openFileDialog.FileName;
-                if (((string)((MenuItem)e.Source).Tag).Contains("school"))
+                foreach(District d in (List<District>)treeItem.Tag)
                 {
-                    readwriteExel.readStudent_in_School(path);
+                    item = new TreeViewItem();
+                    item.Header = d.Name;
+                    item.Tag = db.GetSchoolInDistrict(d.ID);
+                    item.Items.Add("*");
+                    treeItem.Items.Add(item);                    
                 }
-                else if (((string)((MenuItem)e.Source).Tag).Contains("building"))
+                return;
+            }
+            if(treeItem.Tag is List<School>)
+            {
+                foreach(School s in (List<School>)treeItem.Tag)
                 {
-                    readwriteExel.readStudent_in_Building(path);
+                    item = new TreeViewItem();
+                    item.Header = s.Name;
+                    item.Tag = s.ID.ToString();
+                    item.Items.Add("*");
+                    treeItem.Items.Add(item);                    
                 }
+                return;
+            }
+            if(treeItem.Tag is string)
+            {
+                List<Student> students = db.GetSudentsinSchool(Convert.ToInt32(treeItem.Tag));
+                dataGrid.ItemsSource = students;
             }
         }
     }
