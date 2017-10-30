@@ -68,7 +68,7 @@ namespace VseobuchDB.DB
             int i=0;
             if (sch == null)
             {
-                // sch=db.Schools.AddNewSchool()   //метод який добавляє нову школу
+                sch = db.Schools.Add(new School() { Name = school });   //метод який добавляє нову школу
             }
             for(int j=0; j<lStu.Count;j++)
             {
@@ -137,11 +137,11 @@ namespace VseobuchDB.DB
         }
         public List<Student> FoundStudent() //повертає список студентів про яких є дані зі школи і жеку
         {
-            return db.Students.Where(x => FoundStudent(x)).ToList();
+            return db.Students.ToList().Where(x => FoundStudent(x)).ToList();
         }
         public List<Student> NotFoundStudent() //повертає список студентів про яких є дані зі школи і жеку
         {
-            return db.Students.Where(x => !FoundStudent(x)).ToList();
+            return db.Students.ToList().Where(x => !FoundStudent(x)).ToList();
         }
 
         public List<City> GetCity()

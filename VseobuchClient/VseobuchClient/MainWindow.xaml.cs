@@ -25,21 +25,28 @@ namespace VseobuchClient
         public MainWindow()
         {
             InitializeComponent();
-            ConnectionDb db = new ConnectionDb("Students1");
+            ConnectionDb db = new ConnectionDb("Students");
+            
             City city = new City();
             city = db.GetCity()[0];
             itemStart.Tag = city;
             itemStart.Items.Add("*");
             ShowTreeView(itemStart);
-
+           // db.
         }
-        
+
+        private void UploadFile2(object sender, RoutedEventArgs e)
+        {
+            ConnectionDb db = new ConnectionDb("Students");
+            dataGrid.ItemsSource = db.NotFoundStudent();
+        }
+
         private void UploadFile(object sender, RoutedEventArgs e)
         {
                 Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
                 if ((bool)openFileDialog.ShowDialog())
                 {
-                    ConnectionDb db = new ConnectionDb("Students1");
+                    ConnectionDb db = new ConnectionDb("Students");
                     string path = openFileDialog.FileName;
                     if (((string)((MenuItem)e.Source).Tag).Contains("school"))
                     {
@@ -61,7 +68,7 @@ namespace VseobuchClient
 
         private void ShowTreeView(TreeViewItem treeItem)
         {
-            ConnectionDb db = new ConnectionDb("Students1");
+            ConnectionDb db = new ConnectionDb("Students");
             TreeViewItem item;
             treeItem.Items.Clear();
             if(treeItem.Tag is City)

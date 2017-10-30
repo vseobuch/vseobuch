@@ -121,7 +121,7 @@ namespace VseobuchDB
         }
     }
 
-    public class MyDbContext : DbContext
+     class MyDbContext : DbContext
     {
         public MyDbContext() : base("Students") { }
         public MyDbContext(string str) : base(str) { }

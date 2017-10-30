@@ -29,3 +29,12 @@ E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\bin\Debug\EntityFramework.SqlSer
 E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\obj\Debug\VseobuchDB.csproj.CoreCompileInputs.cache
 E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\obj\Debug\VseobuchDB.dll
 E:\Shag\Projects\Vseobuch\VseobuchDB\VseobuchDB\obj\Debug\VseobuchDB.pdb
+F:\Vseobuch2\vseobuch\VseobuchDB\VseobuchDB\bin\Debug\VseobuchDB.dll.config
+F:\Vseobuch2\vseobuch\VseobuchDB\VseobuchDB\bin\Debug\VseobuchDB.dll
+F:\Vseobuch2\vseobuch\VseobuchDB\VseobuchDB\bin\Debug\VseobuchDB.pdb
+F:\Vseobuch2\vseobuch\VseobuchDB\VseobuchDB\bin\Debug\EntityFramework.dll
+F:\Vseobuch2\vseobuch\VseobuchDB\VseobuchDB\bin\Debug\EntityFramework.SqlServer.dll
+F:\Vseobuch2\vseobuch\VseobuchDB\VseobuchDB\bin\Debug\EntityFramework.xml
+F:\Vseobuch2\vseobuch\VseobuchDB\VseobuchDB\bin\Debug\EntityFramework.SqlServer.xml
+F:\Vseobuch2\vseobuch\VseobuchDB\VseobuchDB\obj\Debug\VseobuchDB.dll
+F:\Vseobuch2\vseobuch\VseobuchDB\VseobuchDB\obj\Debug\VseobuchDB.pdb

@@ -16,8 +16,9 @@ namespace VseobuchDB.DB
         /// </summary>
         public static void readStudent_in_School(string path)
         {
-            List<string> letter = new List<string>();
-            letter = letters();
+            //List<string> letter = new List<string>();
+            //letter = letters();
+            List<string> letter = letters();
             excelApp = new Excel.Application();
             //excelApp.Visible = true;            
             excelappworkbook = excelApp.Workbooks.Open(
@@ -27,12 +28,13 @@ namespace VseobuchDB.DB
                 Type.Missing, Type.Missing);
             excelSheets = excelappworkbook.Worksheets;
             excelWorksheet = (Excel.Worksheet)excelSheets.get_Item(1);
-            School school = new School();
+           // School school = new School();
             List<KeyValuePair<Student, string>> students = new List<KeyValuePair<Student, string>>();
             List<int> startRead = ofsetRowColumnExcel(1);
             int startRow = startRead[1] + 1;
             int startColumn = startRead[0];
-            school.Name = Convert.ToString((excelWorksheet.get_Range(letter[startColumn] + startRow, Type.Missing)).Value2);
+            // school.Name = Convert.ToString((excelWorksheet.get_Range(letter[startColumn] + startRow, Type.Missing)).Value2);
+            string schoolName = Convert.ToString((excelWorksheet.get_Range(letter[startColumn] + startRow, Type.Missing)).Value2);
             for (int i = 0; i > -1; i++)
             {
                 int j = startColumn + 1;
@@ -82,13 +84,14 @@ namespace VseobuchDB.DB
                 }
             }
             excelApp.Quit();            
-            ConnectionDb.ImportFromExelSchool(students, school.Name);
+            ConnectionDb.ImportFromExelSchool(students, schoolName);
         }
 
         public static void readStudent_in_Building(string path)
-        {            
-            List<string> letter = new List<string>();
-            letter = letters();
+        {
+            //List<string> letter = new List<string>();
+            //letter = letters();
+            List<string> letter = letters();
             excelApp = new Excel.Application();
             //excelApp.Visible = true;           
             excelappworkbook = excelApp.Workbooks.Open(
@@ -173,8 +176,9 @@ namespace VseobuchDB.DB
         private static List<int> ofsetRowColumnExcel(int row_Start)//Визначення зміщення для початку читання файлу
         {
             int numberRow;
-            List<string> letter = new List<string>();
-            letter = letters();
+            //List<string> letter = new List<string>();
+            //letter = letters();
+            List<string> letter = letters();
             List<int> ofset_row_column = new List<int>();
             for (int i = 0; i < 10; i++)
             {
