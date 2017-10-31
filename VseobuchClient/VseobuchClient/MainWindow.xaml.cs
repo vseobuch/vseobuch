@@ -25,7 +25,7 @@ namespace VseobuchClient
         public MainWindow()
         {
             InitializeComponent();
-            ConnectionDb db = new ConnectionDb("Students");
+            ConnectionDb db = new ConnectionDb("Students1");
             
             City city = new City();
             city = db.GetCity()[0];
@@ -37,7 +37,7 @@ namespace VseobuchClient
 
         private void UploadFile2(object sender, RoutedEventArgs e)
         {
-            ConnectionDb db = new ConnectionDb("Students");
+            ConnectionDb db = new ConnectionDb("Students1");
             dataGrid.ItemsSource = db.NotFoundStudent();
         }
 
@@ -46,16 +46,14 @@ namespace VseobuchClient
                 Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
                 if ((bool)openFileDialog.ShowDialog())
                 {
-                    ConnectionDb db = new ConnectionDb("Students");
+                    ConnectionDb db = new ConnectionDb("Students1");
                     string path = openFileDialog.FileName;
-                    if (((string)((MenuItem)e.Source).Tag).Contains("school"))
-                    {
-                        readwriteExel.readStudent_in_School(path);
-                    }
-                    else if (((string)((MenuItem)e.Source).Tag).Contains("building"))
-                    {
-                        readwriteExel.readStudent_in_Building(path);
-                    }                    
+                if (((string)((MenuItem)e.Source).Tag).Contains("students"))
+                    readwriteExel.readStudent_in_School(path);
+                else if (((string)((MenuItem)e.Source).Tag).Contains("building"))
+                    readwriteExel.readStudent_in_Building(path);
+                else if (((string)((MenuItem)e.Source).Tag).Contains("schools"))                  
+                    readwriteExel.readSchools(path);
                 }
         }
 
@@ -68,7 +66,7 @@ namespace VseobuchClient
 
         private void ShowTreeView(TreeViewItem treeItem)
         {
-            ConnectionDb db = new ConnectionDb("Students");
+            ConnectionDb db = new ConnectionDb("Students1");
             TreeViewItem item;
             treeItem.Items.Clear();
             if(treeItem.Tag is City)

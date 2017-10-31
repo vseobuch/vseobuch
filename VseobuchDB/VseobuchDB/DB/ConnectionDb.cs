@@ -49,7 +49,7 @@ namespace VseobuchDB.DB
 /// <param name="stu"></param>
 /// <param name="sch"></param>
 /// <returns></returns>
-     public   static int ImportFromExelSchool(List<KeyValuePair<Student, string>> Pair_student_class, string school) 
+     public   static int ImportFromExelStudentinSchool(List<KeyValuePair<Student, string>> Pair_student_class, string school) 
         {
             
           //  List<Student> lStu = AddRangeStuddent(stu);//отримуємо список студентів вставлених в базу даних(з ІД) 
@@ -111,6 +111,58 @@ namespace VseobuchDB.DB
             return 0;
         }
 
+        public static int  ImportFromExcelSchool(School school)
+        {            
+            Address address = setAddress(school.address);
+            School sch = db.Schools.FirstOrDefault(x => x.Name == school.Name && x.address.Street == school.address.Street);
+            if (sch == null)
+            {
+                if (sch.Name == null)
+                {
+                    db.Addresses.ToList();
+                    school.address = address;
+                    db.Schools.Add(school);                      
+                }
+                else
+                {
+                    db.Addresses.ToList();
+                    school.address = address;
+                }
+                db.SaveChanges();
+                return 1;
+            }
+            else
+                return 0;
+        }
+
+        public static District setDistrict(District district)
+        {
+            District dist = db.Districts.FirstOrDefault(x => x.Name == district.Name);
+            if (dist == null)
+            {
+                dist = db.Districts.Add(district);
+                db.SaveChanges();
+                return dist;
+            }
+            else
+                return dist;
+        }
+
+        public static Address setAddress(Address address)
+        {
+            db.Districts.ToList();
+            Address addr = db.Addresses.FirstOrDefault(x => x.Street == address.Street && x.NumberBuilding == address.NumberBuilding);
+            if (addr == null)
+            {
+                District dist = setDistrict(address.district);
+                address.district = dist;
+                db.Addresses.Add(address);
+                db.SaveChanges();
+                return addr;
+            }
+            else
+                return addr;
+        }
 
         public int CountStudents()
         {

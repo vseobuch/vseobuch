@@ -84,13 +84,11 @@ namespace VseobuchDB.DB
                 }
             }
             excelApp.Quit();            
-            ConnectionDb.ImportFromExelSchool(students, schoolName);
+            ConnectionDb.ImportFromExelStudentinSchool(students, schoolName);
         }
 
         public static void readStudent_in_Building(string path)
-        {
-            //List<string> letter = new List<string>();
-            //letter = letters();
+        {            
             List<string> letter = letters();
             excelApp = new Excel.Application();
             //excelApp.Visible = true;           
@@ -175,9 +173,7 @@ namespace VseobuchDB.DB
 
         private static List<int> ofsetRowColumnExcel(int row_Start)//Визначення зміщення для початку читання файлу
         {
-            int numberRow;
-            //List<string> letter = new List<string>();
-            //letter = letters();
+            int numberRow;            
             List<string> letter = letters();
             List<int> ofset_row_column = new List<int>();
             for (int i = 0; i < 10; i++)
@@ -212,6 +208,44 @@ namespace VseobuchDB.DB
                 a++;
             }
             return letter;
+        }
+
+        public static void readSchools(string path)
+        {
+            bool returnschool = true;
+            School school;
+            Address address;
+            District district;
+            List<string> letter = letters();
+            excelApp = new Excel.Application();           
+            excelappworkbook = excelApp.Workbooks.Open(
+                path, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing);
+            excelSheets = excelappworkbook.Worksheets;
+            excelWorksheet = (Excel.Worksheet)excelSheets.get_Item(2);
+            int row = 4, j = 0;
+            while(returnschool)
+            {
+                school = new School();
+                address = new Address();
+                district = new District();
+                district.Name= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                school.Name= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                address.district = district;
+                address.Street= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                address.NumberBuilding= Convert.ToString((excelWorksheet.get_Range(letter[j++] + row, Type.Missing)).Value2);
+                school.address = address;
+                if (school.Name != null)
+                {
+                    ConnectionDb.ImportFromExcelSchool(school);
+                    row++;
+                    j = 0;
+                }
+                else
+                    returnschool = false;
+            }
         }
     }
 }

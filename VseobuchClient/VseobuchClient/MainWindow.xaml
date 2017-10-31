@@ -20,8 +20,9 @@
             <ToolBar>
                 <Menu VerticalAlignment="Top">
                     <MenuItem Header="Файл" Click="UploadFile">
-                        <MenuItem Header="Загрузити студенти в школі" Tag="school"></MenuItem>
+                        <MenuItem Header="Загрузити студенти в школі" Tag="students"></MenuItem>
                         <MenuItem Header="Загрузити студенти проживання" Tag="building"></MenuItem>
+                        <MenuItem Header="Загрузити школи" Tag="schools"></MenuItem>
                     </MenuItem>
                     <MenuItem Header="Файл2" Click="UploadFile2">
                         <MenuItem Header="Студенти яких не знайдено в школі" Tag="school"></MenuItem>                        
