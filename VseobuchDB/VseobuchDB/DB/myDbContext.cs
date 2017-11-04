@@ -117,7 +117,18 @@ namespace VseobuchDB
         public DateTime graduation { get; set; }
         public override string ToString()
         {
-            return "s";
+            return student.ToString()+" address:"+ address.ToString();
+        }
+    }
+
+    public class Student_Privileges
+    {
+        public int ID { get; set; }
+        public Student student { get; set; }
+        public string Privilege { get; set; }
+        public override string ToString()
+        {
+            return student.ToString()+ " Privilege "+Privilege;
         }
     }
 
@@ -135,5 +146,6 @@ namespace VseobuchDB
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<Student_In_School> Students_In_School { get; set; }
         public virtual DbSet<Student_In_Building> Students_In_Building { get; set; }
+        public virtual DbSet<Student_Privileges> Students_Privileges { get; set; }
     }
 }
